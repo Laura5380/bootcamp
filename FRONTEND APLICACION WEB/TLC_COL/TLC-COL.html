@@ -1,0 +1,59 @@
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>TLC COL</title>
+  <link rel="stylesheet" href="body.css">
+  </head>
+    <title>TLC COL</title>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg" alt="Bandera de Colombia" width="60">
+   <img src="https://i.pinimg.com/originals/de/c0/20/dec0208130c89d6421f5bddbae495df8.gif" alt="Globo terráqueo" width="60">
+
+  <body>
+            <h1>Acuerdos de Colombia</h1>
+                <br>
+            <table>
+                <thead>
+                    <th> Indice</th>                  
+                    <th> Subpartida</th>
+                    <th> Descripción</th>
+                    <th> Tasa Base</th>
+                    <th> Categoria de Desgravación</th>
+
+                </thead>
+                <tbody id = "cuerpo-tabla"> 
+                
+                </tbody>
+            </table>
+
+
+        <br>
+
+            <script>
+                async function cargarTratados() {
+                    try {
+                       const respuesta = await fetch(##excel##
+                       const datos = await respuesta.json();
+                       const cuerpoTabla = document.getElementById("cuerpo-tabla");
+                       cuerpoTabla.innerHTML = " ";
+                       let indice = 1;
+                       datos.forEach((item) => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                        <td>${indice}</td>
+                        <td>${item.Subpartida}</td>
+                        <td>${item.Descripción}</td>
+                        <td>${item.TasaBase}</td>
+                        <td>${item.CategoriadeDesgravación}</td>
+
+                        `;
+                        indice = indice+1
+                        cuerpoTabla.appendChild(fila);
+                       });
+                    }catch(error){
+                        console.log("El error fue: "+error)
+                    }
+                }
+                document.addEventListener('DOMContentLoaded',cargarTratados);
+            </script>
+        </body>
+</html>

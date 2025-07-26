@@ -1,0 +1,80 @@
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>TLC COL</title>
+  <link rel="stylesheet" href="body.css">
+  </head>
+    <title>Listado de Personas</title>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg" alt="Bandera de Colombia" width="60">
+   <img src="https://i.pinimg.com/originals/de/c0/20/dec0208130c89d6421f5bddbae495df8.gif" alt="Globo terráqueo" width="60">
+
+  <body>
+            <h1>Acuerdos de Colombia</h1>
+                <br>
+            <table>
+                <thead>
+                    <th> Indice</th>                  
+                    <th> nombretratado</th>
+                    <th> bilateral</th>
+                    <th> lugaradopcion</th>
+                    <th> fechaadopcion</th>
+                    <th> estadosorganismos</th>
+                    <th> temas</th>
+                    <th> naturalezatratado</th>
+                    <th> suscribioporcolombia</th>
+                    <th> vigente</th>
+                    <th> fechaleyaprobatoria</th>
+                    <th> numeroleyaprobatoria</th>
+                    <th> sentenciafechaley</th>
+                    <th> sentencianumero</th>
+                    <th> decretofechadiariooficial</th>
+                    <th> decretonumerodiariooficial</th>
+
+                </thead>
+                <tbody id = "cuerpo-tabla"> 
+                
+                </tbody>
+            </table>
+
+
+        <br>
+
+            <script>
+                async function cargarTratados() {
+                    try {
+                       const respuesta = await fetch('https://www.datos.gov.co/resource/fdir-hk5z.json')
+                       const datos = await respuesta.json();
+                       const cuerpoTabla = document.getElementById("cuerpo-tabla");
+                       cuerpoTabla.innerHTML = " ";
+                       let indice = 1;
+                       datos.forEach((item) => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                        <td>${indice}</td>
+                        <td>${item.nombretratado}</td>
+                        <td>${item.bilateral}</td>
+                        <td>${item.lugaradopcion}</td>
+                        <td>${item.fechaadopcion}</td>
+                        <td>${item.estadosorganismos}</td>
+                        <td>${item.temas}</td>
+                        <td>${item.naturalezatratado}</td>
+                        <td>${item.suscribioporcolombia}</td>
+                        <td>${item.vigente}</td>
+                        <td>${item.fechaleyaprobatoria}</td>
+                        <td>${item.numeroleyaprobatoria}</td>
+                        <td>${item.sentenciafechaley}</td>
+                        <td>${item.sentencianumero}</td>
+                        <td>${item.decretofechadiariooficial}</td>
+                        <td>${item.decretonumerodiariooficial}</td>
+                        `;
+                        indice = indice+1
+                        cuerpoTabla.appendChild(fila);
+                       });
+                    }catch(error){
+                        console.log("El error fue: "+error)
+                    }
+                }
+                document.addEventListener('DOMContentLoaded',cargarTratados);
+            </script>
+        </body>
+</html>

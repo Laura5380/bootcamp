@@ -1,0 +1,168 @@
+<html> 
+<head>
+    <meta charset="UTF-8">
+    <title>TLC COL</title>
+    <link rel="stylesheet" href="body.css">
+    <style>
+        #busqueda-container {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #busqueda, #filtro-temas {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        #busqueda {
+            width: 40%;
+        }
+
+        #filtro-temas {
+            min-width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #ffd200;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Acuerdos de Colombia</h1>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg" alt="Bandera de Colombia" width="60">
+    <img src="https://i.pinimg.com/originals/de/c0/20/dec0208130c89d6421f5bddbae495df8.gif" alt="Globo terráqueo" width="60">
+
+    <div id="busqueda-container">
+        <input type="text" id="busqueda" placeholder="Buscar por Estados u Organismos...">
+        <select id="filtro-temas">
+            <option value="">Filtrar por temas</option>
+        </select>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Indice</th>                  
+                <th>nombretratado</th>
+                <th>bilateral</th>
+                <th>lugaradopcion</th>
+                <th>fechaadopcion</th>
+                <th>estadosorganismos</th>
+                <th>temas</th>
+                <th>naturalezatratado</th>
+                <th>suscribioporcolombia</th>
+                <th>vigente</th>
+                <th>fechaleyaprobatoria</th>
+                <th>numeroleyaprobatoria</th>
+                <th>sentenciafechaley</th>
+                <th>sentencianumero</th>
+                <th>decretofechadiariooficial</th>
+                <th>decretonumerodiariooficial</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpo-tabla"></tbody>
+    </table>
+
+    <script>
+        let todosLosTratados = [];
+
+        async function cargarTratados() {
+            try {
+                const respuesta = await fetch('https://www.datos.gov.co/resource/fdir-hk5z.json');
+                todosLosTratados = await respuesta.json();
+                poblarTemasUnicos();
+            } catch (error) {
+                console.log("Error al cargar los datos: " + error);
+            }
+        }
+
+        function poblarTemasUnicos() {
+            const select = document.getElementById("filtro-temas");
+            const temasUnicos = [...new Set(todosLosTratados.map(t => t.temas).filter(Boolean))];
+            temasUnicos.sort();
+            temasUnicos.forEach(tema => {
+                const option = document.createElement("option");
+                option.value = tema;
+                option.textContent = tema;
+                select.appendChild(option);
+            });
+        }
+
+        function mostrarTratados(tratados) {
+            const cuerpoTabla = document.getElementById("cuerpo-tabla");
+            cuerpoTabla.innerHTML = "";
+            let indice = 1;
+
+            tratados.forEach(item => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${indice}</td>
+                    <td>${item.nombretratado || ""}</td>
+                    <td>${item.bilateral || ""}</td>
+                    <td>${item.lugaradopcion || ""}</td>
+                    <td>${item.fechaadopcion || ""}</td>
+                    <td>${item.estadosorganismos || ""}</td>
+                    <td>${item.temas || ""}</td>
+                    <td>${item.naturalezatratado || ""}</td>
+                    <td>${item.suscribioporcolombia || ""}</td>
+                    <td>${item.vigente || ""}</td>
+                    <td>${item.fechaleyaprobatoria || ""}</td>
+                    <td>${item.numeroleyaprobatoria || ""}</td>
+                    <td>${item.sentenciafechaley || ""}</td>
+                    <td>${item.sentencianumero || ""}</td>
+                    <td>${item.decretofechadiariooficial || ""}</td>
+                    <td>${item.decretonumerodiariooficial || ""}</td>
+                `;
+                indice++;
+                cuerpoTabla.appendChild(fila);
+            });
+        }
+
+        // Filtro por estadosorganismos mientras se escribe
+        document.getElementById('busqueda').addEventListener('input', function () {
+            const texto = this.value.trim().toLowerCase();
+            if (texto === "") {
+                document.getElementById("cuerpo-tabla").innerHTML = "";
+                return;
+            }
+
+            const resultados = todosLosTratados.filter(t =>
+                t.estadosorganismos && t.estadosorganismos.toLowerCase().includes(texto)
+            );
+            mostrarTratados(resultados);
+        });
+
+        // Filtro por temas al cambiar el select
+        document.getElementById('filtro-temas').addEventListener('change', function () {
+            const valor = this.value.trim().toLowerCase();
+            if (valor === "") {
+                document.getElementById("cuerpo-tabla").innerHTML = "";
+                return;
+            }
+
+            const resultados = todosLosTratados.filter(t =>
+                t.temas && t.temas.toLowerCase().includes(valor)
+            );
+            mostrarTratados(resultados);
+        });
+
+        document.addEventListener('DOMContentLoaded', cargarTratados);
+    </script>
+</body>
+</html>
+

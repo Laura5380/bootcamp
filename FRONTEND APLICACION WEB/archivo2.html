@@ -1,0 +1,48 @@
+<html> 
+<head>
+<meta charset="UTF-8">
+<title>TLC COL</title>
+<link rel="stylesheet" href="body.css">
+</head>
+        <body>
+            <h1>Listado de Personas</h1>
+                <br>
+            <table>
+                <thead>
+                    <th>Numero</th>
+                    <th>Edad</th>
+                    <th>Nombre</th>
+                    <th>Profesion</th>
+                </thead>
+                <tbody id = "cuerpo-tabla"> 
+                
+                </tbody>
+            </table>
+            <script>
+                async function cargarPersonas() {
+                    try {
+                       const respuesta = await fetch('http://127.0.0.1:5000/listarpersonas')
+                       const datos = await respuesta.json();
+                       const cuerpoTabla = document.getElementById("cuerpo-tabla");
+                       cuerpoTabla.innerHTML = " ";
+                       let indice = 1;
+                       datos.forEach((item) => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                        <td>${indice}</td>
+                        <td>${item.Edad}</td>
+                        <td>${item.Nombre}</td>
+                        <td>${item.Profesion}</td>
+                        `;
+                        indice = indice+1
+                        cuerpoTabla.appendChild(fila);
+                       });
+                    }catch(error){
+                        console.log("El error fue: "+error)
+                    }
+                }
+                document.addEventListener('DOMContentLoaded',cargarPersonas);
+            </script>
+        </body>
+    </head>
+</html>

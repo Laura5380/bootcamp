@@ -1,0 +1,59 @@
+<html>
+    <head>
+     <meta charset="UTF-8">
+     <title>Tabla Estilizada</title>
+     <link rel="stylesheet" href="estilos.css">
+    </head>
+        <body>
+    <h1 class="titulo">Registros de personas desde la Base de Datos (>‿◠)✌</h1>
+            <table>
+                <thead>
+                    <th>Indice</th>
+                    <th>Identificacion</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Acciones</th>
+                </thead>
+                <tbody id = "datosPersonasBD">
+
+                </tbody>
+            </table>
+
+            <script>
+                async function cargarPersonasDesdeBD() {
+                    try {
+                    const respuesta = await fetch('http://127.0.0.1:5000/datosBase')
+                    const datos = await respuesta.json();
+                    const CuerpoTabla = document.getElementById("datosPersonasBD");
+                    CuerpoTabla.innerHTML = " ";
+                    let Indice = 1;
+                    datos.forEach ((item) => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                        <td>${Indice}</td>
+                        <td>${item.identificación}</td>
+                        <td>${item.edad}</td>
+                        <td>${item.nombre}</td>
+                        <td><button onclick="actualizar(${item.identificación})">Actualizar</button>
+                            <button onclick="eliminar(${item.identificación})">Actualizar</button></td>
+
+                        `;
+                        Indice = Indice+1
+                        CuerpoTabla.appendChild(fila);
+                        });
+                    }catch(error){
+                        console.log("El error fue: "+error)
+                    }
+                }
+                document.addEventListener('DOMContentLoaded',cargarPersonasDesdeBD);
+
+                async function Actualizar(item) {
+                    alert(identificación);
+                }
+                 async function Eliminar(item) {
+                    alert(identificación);
+                }    
+            </script>
+        </body>
+    </head>
+</html>

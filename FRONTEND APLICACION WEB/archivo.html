@@ -1,0 +1,157 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Finanzas Públicas</h1>
+        <br>
+        <table>
+            <thead>
+                <th>Número</th>
+               <th>Edad</th>
+               <th>Nombre</th>
+               <th>Profesion</th>
+            </thead>
+            <tbody id="cuerpo-tabla">
+
+            </tbody>
+        </table>
+
+        <br>
+
+        <table>
+            <thead>
+                <th>Indice</th>
+              <th>Valor</th>
+               <th>Unidad</th>
+               <th>Vigencia Desde</th>
+               <th>Vigencia Hasta</th>
+            </thead>
+            <tbody id="cuerpo-tabla2">
+
+            </tbody>
+        </table>
+
+        <br>
+
+        <h1>Registro de personas desde la Base de datos</h1>
+        <br>
+
+        </table>
+            <h2>Lista de personas</h2>
+        <form id="personaFormulario">
+            <label>identificacion:</label>
+            <input type="number" id="identificacion"required>
+
+            <label>nombre:</label>
+            <input type="text" id="nombre"required>
+
+            <label>edad:</label>
+            <input type="number" id="edad"required>
+            <button type="submit">agregar persona</button>
+        </form>
+
+        <table>
+            <thead>
+                <th>Indice</th>
+                <th>identificacion</th>
+               <th>Nombre</th>
+               <th>Edad</th>
+            </thead>
+            <tbody id="datosPersonasBD">
+
+            </tbody>
+        </table>
+
+        <script>
+            async function cargarPersonasDesdeBD() {
+                try{
+                   const respuesta = await fetch('http://127.0.0.1:5000/datosBase');
+                   const datos = await respuesta.json();
+                   const cuerpoTabla = document.getElementById("datosPersonasBD");
+                   cuerpoTabla.innerHTML = " ";
+                   let indice = 1;
+                   datos.forEach((item) => {
+                     const fila = document.createElement('tr');
+                     fila.innerHTML = `
+                         <td>${indice}</td>
+                         <td>${item.identificacion}</td>
+                         <td>${item.nombre}</td>
+                         <td>${item.edad}</td>
+                         <td><button onclick="actualizar(${item.identificacion})">Actualizar</button>
+                             <button onclick="eliminar(${item.identificacion})">Eliminar</button></td>
+                     `;
+                     indice= indice+1;
+                     cuerpoTabla.appendChild(fila);
+                   });
+                }catch(error){
+                    console.log("El error fue: "+error)
+                }
+            }
+
+
+            async function cargarDatosFinancieros() {
+                try{
+                   const respuesta = await fetch('https://www.datos.gov.co/resource/32sa-8pi3.json?$limit=15');
+                   const datos = await respuesta.json();
+                   const cuerpoTabla = document.getElementById("cuerpo-tabla2");
+                   cuerpoTabla.innerHTML = " ";
+                   let indice = 1;
+                   datos.forEach((item) => {
+                     const fila = document.createElement('tr');
+                     fila.innerHTML = `
+                         <td>${indice}</td>
+                         <td>${item.valor}</td>
+                         <td>${item.unidad}</td>
+                         <td>${item.vigenciadesde}</td>
+                         <td>${item.vigenciahasta}</td>
+                     `;
+                     indice= indice+1;
+                     cuerpoTabla.appendChild(fila);
+                   });
+                }catch(error){
+                    console.log("El error fue: "+error)
+                }
+            }
+
+            
+            
+            document.addEventListener('DOMContentLoaded',cargarDatosFinancieros);
+            document.addEventListener('DOMContentLoaded',cargarPersonasDesdeBD);
+
+            async function actualizar(identificacion) {
+                alert(identificacion);
+                try{
+                    const respuesta = await fetch('http://127.0.0.1:5000/BuscarPersonas/'+
+                    identificacion);
+                    const datos = await respuesta.json();
+                    console.log(datos[0])
+                    document.getElementById("identificacion").value = datos[0].identificacion;
+                    document.getElementById("nombre").value = datos[0].nombre;
+                    document.getElementById("edad").value = datos[0].edad;
+
+                }catch(error){
+                    console.log(error);
+                }
+            }
+            async function eliminar(identificacion) {
+                alert(identificacion);
+                 try {
+            const response = await fetch('http://127.0.0.1:5000/EliminarPersonas/'+identificacion, {
+                method:'DELETE'
+            });
+            
+            if (response.ok) {
+                console.log("Se elimino correctamente");
+            } else {
+                alert('Error al eliminar persona');
+            }
+        } catch (error) {
+            console.error('Error al enviar datos',error);
+        }
+            }  
+
+           
+        </script>
+    </body>
+</html>
