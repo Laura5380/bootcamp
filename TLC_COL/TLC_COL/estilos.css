@@ -1,27 +1,184 @@
-/* estilos.css */
+/* --- Fuente y reseteo básico --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
-    margin: 0;
-    padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+/* --- Header --- */
 header {
-    background-color: #ffd200;
-    color: white;
-    padding: 1rem;
-    text-align: center;
+  background: linear-gradient(90deg, #ffed99, #88c0d0, #f28b82);
+  color: #fff;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* --- Main --- */
 main {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem;
+  width: 100%;
 }
 
+/* --- Input de búsqueda --- */
 input[type="search"] {
-    padding: 0.5rem;
-    width: 50%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #4f92a1;
+  border-radius: 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+  background-color: #fff;
+}
+
+input[type="search"]:focus {
+  border-color: #ffd200;
+  box-shadow: 0 0 10px rgba(255, 210, 0, 0.5);
+}
+
+input[type="search"]:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* --- Resultado --- */
+#resultado,
+#resultado_general,
+#resultado_canada,
+#resultado_ue {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+#resultado p,
+#resultado_general p,
+#resultado_canada p,
+#resultado_ue p {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+#info,
+#info_general,
+#info_canada,
+#info_ue {
+  font-size: 0.95rem;
+}
+
+/* --- Efecto hover en contenedor resultado --- */
+#resultado:hover,
+#resultado_general:hover,
+#resultado_canada:hover,
+#resultado_ue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* --- Mejoras para el dropdown --- */
+.dropdown-item {
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.active {
+  background-color: #0d6efd;
+  color: white !important;
+}
+
+.dropdown-toggle.active {
+  background-color: #0d6efd !important;
+  color: white !important;
+}
+
+/* --- Indicador visual del tratado activo --- */
+.nav-pills {
+  position: relative;
+}
+
+.nav-pills .active {
+  font-weight: bold;
+}
+
+/* --- Estilos personalizados para pestañas (Bootstrap nav-tabs) --- */
+.nav-tabs .nav-link {
+  color: #4f92a1;
+  font-weight: 500;
+  border-radius: 8px 8px 0 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #ffd200 !important;
+  color: #000 !important;
+  font-weight: 700;
+  border: none;
+}
+
+.tab-content {
+  background: #fff;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tab-content input[type="search"] {
+  margin-bottom: 1rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  input[type="search"] {
+    max-width: 90%;
+  }
+
+  #resultado,
+  #resultado_general,
+  #resultado_canada,
+  #resultado_ue {
+    max-width: 90%;
+    padding: 1rem;
+  }
 }
